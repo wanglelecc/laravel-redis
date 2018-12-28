@@ -1,0 +1,21 @@
+{
+    "name": "wanglelecc\/laravel-redis",
+    "description": "Package description here.",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "wanglelecc",
+            "email": "wanglelecc@gmail.com"
+        }
+    ],
+    "require": {
+		"php": "^7.1.3",
+        "illuminate/redis": "5.7.*",
+        "nabao/laravel-lock": "dev-master"
+	},
+    "autoload": {
+        "psr-4": {
+            "Wanglelecc\\Redis\\": "src"
+        }
+    }
+}
