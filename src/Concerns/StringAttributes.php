@@ -65,5 +65,10 @@ trait StringAttributes
     {
         return json_decode($value, ! $asObject);
     }
+    
+    public function fill($attributes)
+    {
+        return $this;
+    }
 
 }

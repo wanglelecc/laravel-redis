@@ -23,7 +23,7 @@ class Lock extends StringModel
     protected $sleep = 200;
     
     // 锁的类别
-    protected $category = 'default';
+    public $category = 'defaultqqq';
     
     // 键名
     protected $table = "lock:%category";
@@ -45,8 +45,8 @@ class Lock extends StringModel
     public function query(\Closure $callback, $id, $category = null, $timeout = null){
     
         $this->id   = $id;
-        $category   ?? $this->category  = $category;
-    
+        $category   && ($this->category  = $category);
+        
         try{
             return BaseLock::lock($callback, $this->getTable());
         }catch (\Exception $exception){

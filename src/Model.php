@@ -122,7 +122,7 @@ abstract class Model
         $prefix = strtolower($this->type) . ':' . str_replace( '\\', '', Str::snake(Str::plural(class_basename($this))) ) . ':';
         
         $table = array_map(function($val){
-            if( substr($val, 0, 1) === '%' && ( $key = str_replace('%', 0, $val) ) ){
+            if( substr($val, 0, 1) === '%' && ( $key = str_replace('%', '', $val) ) ){
                 
                 if( !isset($this->$key) ){
                     throw new ModelLackArrtibutesException("Variabel: `{$key}` undefined");
