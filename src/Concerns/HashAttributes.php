@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the wanglelecc/redis.
+ *
+ * (c) wanglele <wanglelecc@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Wanglelecc\Redis\Concerns;
 use Illuminate\Support\Str;
@@ -19,7 +27,7 @@ trait HashAttributes
      *
      * @return $this
      */
-    public function fill($attributes)
+    public function fill(array $attributes)
     {
         foreach ($this->fillableFromArray($attributes) as $key => $value) {
             $this->setAttribute($key, $value);
@@ -254,7 +262,7 @@ trait HashAttributes
 
     public static function __callStatic($method, $parameters)
     {
-        return (new static)->$method(...$parameters);
+//        return (new static)->$method(...$parameters);
     }
 
     public function __wakeup()

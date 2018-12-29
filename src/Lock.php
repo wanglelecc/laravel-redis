@@ -1,9 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lele.wang
- * Date: 2018/10/29
- * Time: 8:38
+/*
+ * This file is part of the wanglelecc/redis.
+ *
+ * (c) wanglele <wanglelecc@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace Wanglelecc\Redis;
@@ -11,8 +13,11 @@ namespace Wanglelecc\Redis;
 use Lock\Lock as BaseLock;
 use Wanglelecc\Redis\Exceptions\LockTimeoutException;
 
-class Lock extends StringModel
+abstract class Lock extends StringModel
 {
+    
+    protected $type = 'string:lock';
+    
     // 锁的过期时间
     protected $expired = 3;
     
@@ -23,10 +28,10 @@ class Lock extends StringModel
     protected $sleep = 200;
     
     // 锁的类别
-    public $category = 'defaultqqq';
+    public $category = 'default';
     
     // 键名
-    protected $table = "lock:%category";
+    protected $table = "%category";
     
     /**
      * 抢占锁
@@ -101,6 +106,6 @@ class Lock extends StringModel
     
     
     public static function __callStatic($name, $arguments){
-        return (new static)->$method(...$parameters);
+//        return (new static)->$method(...$parameters);
     }
 }

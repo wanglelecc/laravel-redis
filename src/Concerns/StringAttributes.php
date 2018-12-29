@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the wanglelecc/redis.
+ *
+ * (c) wanglele <wanglelecc@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Wanglelecc\Redis\Concerns;
 
@@ -12,6 +20,11 @@ trait StringAttributes
      * @var array
      */
     protected $attributes = null;
+    
+    
+    public function hasAttributeExisted(){
+        return !empty($this->attributes);
+    }
 
     public function getAttributes()
     {
@@ -38,7 +51,7 @@ trait StringAttributes
         
         if( !is_string($value) ){ return false; }
         
-        $json = json_encode($value);
+        $json = json_decode($value);
         
         return JSON_ERROR_NONE === json_last_error();
     }
@@ -51,7 +64,7 @@ trait StringAttributes
      */
     protected function asJson($value)
     {
-        return json_encode($value);
+        return json_decode($value);
     }
     
     /**
@@ -66,8 +79,15 @@ trait StringAttributes
         return json_decode($value, ! $asObject);
     }
     
-    public function fill($attributes)
+    
+    public function fill(array $attributes)
     {
+        foreach ($attributes as $key => $value) {
+            if(property_exists($this, $key)){
+                $this->$key = $value;
+            }
+        }
+        
         return $this;
     }
 

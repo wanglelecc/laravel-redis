@@ -26,7 +26,7 @@ abstract class ZsetModel extends Model
     // 键名
     protected $table = "";
 
-
+    
     public $id;
     
     /**
@@ -41,12 +41,13 @@ abstract class ZsetModel extends Model
 
         $key = $this->getTable();
 
-        if( $this->add($this->attributes) ){
+        if( $this->attributes && $this->add($this->attributes) ){
             $this->setExpired($key);
-            return $this;
+        }else{
+            return false;
         }
-
-        return false;
+    
+        return $this;
     }
 
     /**
@@ -59,6 +60,8 @@ abstract class ZsetModel extends Model
     public function add(array $attributes)
     {
         $this->validate();
+        
+        $this->fill($attributes);
         
         return $this->getConnection()->zadd($this->getTable(), $attributes);
     }
@@ -168,9 +171,9 @@ abstract class ZsetModel extends Model
     {
         $this->validate();
     
-        $option = ['WITHSCORES'];
+        $option = 'WITHSCORES';
     
-        $value = $this->getConnection()->zrange($this->getTable(), $start, $stop, (array)$option);
+        $value = $this->getConnection()->zrange($this->getTable(), $start, $stop, $option);
         
         $attributes = $this->valueToArray($value);
         
@@ -190,7 +193,7 @@ abstract class ZsetModel extends Model
     {
         $this->validate();
     
-        $option = ['WITHSCORES'];
+        $option = 'WITHSCORES';
         
         $value = $this->getConnection()->zrangebylex($this->getTable(), $min, $max, (array)$option);
     
@@ -212,7 +215,7 @@ abstract class ZsetModel extends Model
         
         $this->validate();
     
-        $option = ['WITHSCORES'];
+        $option = 'WITHSCORES';
     
         $value = $this->getConnection()->zrangebyscore($this->getTable(), $min, $max, (array)$option);
     
@@ -325,7 +328,7 @@ abstract class ZsetModel extends Model
         
         $this->validate();
         
-        $option = ['WITHSCORES'];
+        $option = 'WITHSCORES';
         
         $value = $this->getConnection()->zrevrangebyscore($this->getTable(), $start, $stop, (array)$option);
     
@@ -347,7 +350,7 @@ abstract class ZsetModel extends Model
         
         $this->validate();
         
-        $option = ['WITHSCORES'];
+        $option = 'WITHSCORES';
         
         $value = $this->getConnection()->zrevrange($this->getTable(), $start, $stop, (array)$option);
     
@@ -393,12 +396,13 @@ abstract class ZsetModel extends Model
      * @return array
      */
     protected function valueToArray(array $values){
+        
         $array = [];
-        
-        for( $i = 0, $len = count($values); $i < $len; $i + 2 ){
-            $array[$values[$i]] = $values[$i+1];
+
+        foreach( $values as $key => $value ){
+            $array[$key] = (integer)$value;
         }
-        
+
         return $array;
     }
 

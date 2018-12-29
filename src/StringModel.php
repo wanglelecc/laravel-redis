@@ -52,14 +52,19 @@ abstract class StringModel extends Model
     /**
      * 保存
      *
+     * @param $key
      * @param $value
      *
      * @return mixed
      * @throws Exceptions\ModelLackArrtibutesException
      */
-    public function set($value)
+    public function set($key, $value)
     {
+        $this->id = $key;
+        
         $this->validate();
+    
+        $this->setAttribute($value);
         
         return $this->getConnection()->set($this->getTable(), $value);
     }
@@ -67,16 +72,23 @@ abstract class StringModel extends Model
     /**
      * 获取值
      *
+     * @param $key
+     *
      * @return string
      * @throws Exceptions\ModelLackArrtibutesException
      */
-    public function get()
+    public function get($key)
     {
+        $this->id = $key;
+        
         $this->validate();
         
-        $value = $this->getConnection()->get($this->getTable());
-        
-        $this->setAttribute($value);
+        if( $this->hasAttributeExisted() ){
+            $value = $this->getAttributes();
+        }else{
+            $value = $this->getConnection()->get($this->getTable());
+            $this->setAttribute($value);
+        }
         
         return $value;
     }

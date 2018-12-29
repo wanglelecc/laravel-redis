@@ -25,8 +25,7 @@ abstract class SetModel extends Model
     
     // 键名
     protected $table = "";
-
-
+    
     public $id;
 
 
@@ -36,12 +35,13 @@ abstract class SetModel extends Model
 
         $key = $this->getTable();
 
-        if( $this->add(array_keys($this->attributes)) ){
+        if( $this->attributes && $this->add(array_values($this->attributes)) ){
             $this->setExpired($key);
-            return $this;
+        }else{
+            return false;
         }
-
-        return false;
+    
+        return $this;
     }
 
     /**
@@ -56,6 +56,8 @@ abstract class SetModel extends Model
         $this->validate();
 
         $attributes = (array)$attributes;
+        
+        $this->fill($attributes);
 
         return $this->getConnection()->sadd($this->getTable(), array_values($attributes));
     }
@@ -72,7 +74,9 @@ abstract class SetModel extends Model
     
         $attributes = $this->getConnection()->smembers($this->getTable());
         
-        return $this->fill($attributes);
+        $this->fill($attributes);
+        
+        return $attributes;
     }
 
     /**

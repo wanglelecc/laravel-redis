@@ -309,6 +309,17 @@ abstract class ListModel extends Model
         return $array;
     }
     
+    public function fill(array $attributes)
+    {
+        foreach ($attributes as $key => $value) {
+            if(property_exists($this, $key)){
+                $this->$key = $value;
+            }
+        }
+        
+        return $this;
+    }
+    
     public function __call($method, $parameters)
     {
         return $this->getConnection()->{$method}(...$parameters);

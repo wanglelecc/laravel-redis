@@ -36,9 +36,14 @@ abstract class Model
     {
     }
 
-    public function __construct(array $attributes = [])
+    public function __construct($attributes = [])
     {
-        $this->fill($attributes);
+        if( is_array($attributes) || is_object($attributes) ){
+            $this->fill((array)$attributes);
+        }else if(is_string($attributes) || is_integer($attributes)) {
+            $this->fill(['id'=>$attributes]);
+        }
+        
     }
     
     public function getConnection()

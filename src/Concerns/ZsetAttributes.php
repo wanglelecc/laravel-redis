@@ -1,4 +1,12 @@
 <?php
+/*
+ * This file is part of the wanglelecc/redis.
+ *
+ * (c) wanglele <wanglelecc@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
 
 namespace Wanglelecc\Redis\Concerns;
 
@@ -23,7 +31,12 @@ trait ZsetAttributes
     public function fill(array $attributes)
     {
         foreach ($attributes as $key => $value) {
-            $this->setAttribute($key, $value);
+    
+            if(property_exists($this, $key)){
+                $this->$key = $value;
+            }else{
+                $this->setAttribute($key, $value);
+            }
         }
 
         return $this;
